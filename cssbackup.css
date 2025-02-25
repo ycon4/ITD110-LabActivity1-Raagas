@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+/* General Styles */
+body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 100;
+  color: #2e2e2e;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+h2 {
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Container Styles */
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.addStudent {
+  background-color: #941a1d;
+  width: 25%;
+  /* height: 100vh; */
+  padding: 20px;
+  box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.1);
+  background: url('./pictures/rep.png') no-repeat center center / cover;
+}
+
+.students {
+  width: 75%;
+  padding: 20px;
+}
+
+/* Table Container */
+.table-container {
+  max-height: calc(7 * 50px); /* Height of 5 rows (adjust 50px to match your row height) */
+  overflow-y: auto; /* Enable vertical scrollbar */
+  border-radius: 10px; /* Match the table's border radius */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Match the table's shadow */
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: #940706; /* Header background color */
+  color: white; /* Header text color */
+  position: sticky; /* Make the header sticky */
+  top: 0; /* Stick to the top of the container */
+  z-index: 1; /* Ensure the header stays above the rows */
+}
+
+th, td {
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  font-weight: 700;
+}
+
+td {
+  background-color: white;
+}
+
+/* Fix the rounding issue */
+thead tr:first-child th:first-child {
+  border-top-left-radius: 10px;
+}
+
+thead tr:first-child th:last-child {
+  border-top-right-radius: 10px;
+}
+
+tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+/* Hover effect for table rows */
+tbody tr:hover td {
+  background-color: #e6e6e6; /* Light gray background on hover */
+  transition: background-color 0.2s ease; /* Smooth transition */
+}
+
+/* Button Styles */
+.edit-btn, .delete-btn {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Increase the size of the images */
+.edit-btn img, .delete-btn img {
+  width: 32px; /* Increased from 24px */
+  height: 32px; /* Increased from 24px */
+  border-radius: 5px;
+  transition: opacity 0.2s;
+}
+
+.edit-btn:hover img, .delete-btn:hover img {
+  opacity: 0.8;
+}
+
+.edit-btn:last-child, .delete-btn:last-child {
+  margin-left: 8px;
+}
+
+.edit-btn, .delete-btn {
+  margin-right: 8px;
+}
