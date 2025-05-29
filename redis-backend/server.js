@@ -22,94 +22,97 @@ client.connect()
 
 // CRUD Operations
 
-// Route to save student data
+// Route to save person data
 app.post('/students', async (req, res) => {
-  const { id, name, course, age, position, team, gender, penName } = req.body;
+  console.log('Received data:', req.body);
+  const { id, firstName, lastName, age, gender, civilStatus, occupation, address, income } = req.body;
 
   // Validate input fields
-  if (!id || !name || !course || !age || !position || !team || !gender || !penName) {
+  if (!id || !firstName || !lastName || !age || !gender || !civilStatus || !occupation || !address || !income) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   try {
-    // Check if student already exists
-    const existingStudent = await client.hGetAll(`student:${id}`);
-    if (Object.keys(existingStudent).length > 0) {
-      return res.status(400).json({ message: `Student with ID ${id} already exists` });
+    // Check if person already exists
+    const existingPerson = await client.hGetAll(`person:${id}`);
+    if (Object.keys(existingPerson).length > 0) {
+      return res.status(400).json({ message: `Person with ID ${id} already exists` });
     }
 
-    // Save student data in Redis hash
-    await client.hSet(`student:${id}`, 'name', name);
-    await client.hSet(`student:${id}`, 'course', course);
-    await client.hSet(`student:${id}`, 'age', age);
-    await client.hSet(`student:${id}`, 'position', position);
-    await client.hSet(`student:${id}`, 'team', team);
-    await client.hSet(`student:${id}`, 'gender', gender);
-    await client.hSet(`student:${id}`, 'penName', penName);
+    // Save person data in Redis hash
+    await client.hSet(`person:${id}`, 'firstName', firstName);
+    await client.hSet(`person:${id}`, 'lastName', lastName);
+    await client.hSet(`person:${id}`, 'age', age);
+    await client.hSet(`person:${id}`, 'gender', gender);
+    await client.hSet(`person:${id}`, 'civilStatus', civilStatus);
+    await client.hSet(`person:${id}`, 'occupation', occupation);
+    await client.hSet(`person:${id}`, 'address', address);
+    await client.hSet(`person:${id}`, 'income', income);
 
     // Respond with success message
-    res.status(201).json({ message: 'Student saved successfully' });
+    res.status(201).json({ message: 'Person saved successfully' });
   } catch (error) {
-    console.error('Error saving student:', error);
-    res.status(500).json({ message: 'Failed to save student', error: error.message });
+    console.error('Error saving person:', error);
+    res.status(500).json({ message: 'Failed to save person', error: error.message });
   }
 });
 
 // Read (R)
 app.get('/students/:id', async (req, res) => {
   const id = req.params.id;
-  const student = await client.hGetAll(`student:${id}`);
-  if (Object.keys(student).length === 0) {
-    return res.status(404).json({ message: 'Student not found' });
+  const person = await client.hGetAll(`person:${id}`);
+  if (Object.keys(person).length === 0) {
+    return res.status(404).json({ message: 'Person not found' });
   }
-  res.json(student);
+  res.json({ id, ...person });
 });
 
-// Read all students
+// Read all persons
 app.get('/students', async (req, res) => {
-  const keys = await client.keys('student:*');
-  const students = await Promise.all(keys.map(async (key) => {
+  const keys = await client.keys('person:*');
+  const persons = await Promise.all(keys.map(async (key) => {
     return { id: key.split(':')[1], ...(await client.hGetAll(key)) };
   }));
-  res.json(students);
+  res.json(persons);
 });
 
 // Update (U)
 app.put('/students/:id', async (req, res) => {
   const id = req.params.id;
-  const { name, course, age, position, team, gender, penName } = req.body;
+  const { firstName, lastName, age, gender, civilStatus, occupation, address, income } = req.body;
 
-  if (!name && !course && !age && !position && !team && !gender && !penName) {
+  if (!firstName && !lastName && !age && !gender && !civilStatus && !occupation && !address && !income) {
     return res.status(400).json({ message: 'At least one field is required to update' });
   }
 
   try {
-    const existingStudent = await client.hGetAll(`student:${id}`);
-    if (Object.keys(existingStudent).length === 0) {
-      return res.status(404).json({ message: 'Student not found' });
+    const existingPerson = await client.hGetAll(`person:${id}`);
+    if (Object.keys(existingPerson).length === 0) {
+      return res.status(404).json({ message: 'Person not found' });
     }
 
-    // Update student data in Redis
-    if (name) await client.hSet(`student:${id}`, 'name', name);
-    if (course) await client.hSet(`student:${id}`, 'course', course);
-    if (age) await client.hSet(`student:${id}`, 'age', age);
-    if (position) await client.hSet(`student:${id}`, 'position', position);
-    if (team) await client.hSet(`student:${id}`, 'team', team);
-    if (gender) await client.hSet(`student:${id}`, 'gender', gender);
-    if (penName) await client.hSet(`student:${id}`, 'penName', penName);
+    // Update person data in Redis
+    if (firstName) await client.hSet(`person:${id}`, 'firstName', firstName);
+    if (lastName) await client.hSet(`person:${id}`, 'lastName', lastName);
+    if (age) await client.hSet(`person:${id}`, 'age', age);
+    if (gender) await client.hSet(`person:${id}`, 'gender', gender);
+    if (civilStatus) await client.hSet(`person:${id}`, 'civilStatus', civilStatus);
+    if (occupation) await client.hSet(`person:${id}`, 'occupation', occupation);
+    if (address) await client.hSet(`person:${id}`, 'address', address);
+    if (income) await client.hSet(`person:${id}`, 'income', income);
 
-    res.status(200).json({ message: 'Student updated successfully' });
+    res.status(200).json({ message: 'Person updated successfully' });
   } catch (error) {
-    console.error('Error updating student:', error);
-    res.status(500).json({ message: 'Failed to update student' });
+    console.error('Error updating person:', error);
+    res.status(500).json({ message: 'Failed to update person' });
   }
 });
 
 // Delete (D)
 app.delete('/students/:id', async (req, res) => {
   const id = req.params.id;
-  await client.del(`student:${id}`);
-  res.status(200).json({ message: 'Student deleted successfully' });
+  await client.del(`person:${id}`);
+  res.status(200).json({ message: 'Person deleted successfully' });
 });
 
 // Start server
